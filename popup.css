@@ -1,0 +1,25 @@
+body {
+	color: #d2c9e8;
+	background-color: #4b367c;
+}
+
+h1 {
+	color: white;
+}
+
+button {
+	background: #6441a4;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    width: 100%;
+}
+
+a {
+	color: white;
+}
+
+.footer-text {
+	position: absolute;
+	bottom: 0;
+}
