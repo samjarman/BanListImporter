@@ -3,7 +3,7 @@
   "description": "Lets you load a CSV of words for banning in your Twitch channel.",
   "version": "1.0.2",
   "permissions": [
-    "activeTab", "https://www.twitch.tv/*/dashboard/settings/moderation/blocked-terms"
+    "activeTab", "https://dashboard.twitch.tv/u/*/settings/moderation/blocked-terms"
   ],
   "browser_action": {
     "default_title": "Load banned words into Twitch",
@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.twitch.tv/*/dashboard/settings/moderation/blocked-terms"
+        "https://dashboard.twitch.tv/u/*/settings/moderation/blocked-terms"
       ],
       "js": [
         "banListImporter.js"
