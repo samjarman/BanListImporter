@@ -1,11 +1,12 @@
 {
+  "manifest_version": 3,
   "name": "Ban List Importer (For Twitch) [Beta]",
   "description": "Lets you load a CSV of words for banning in your Twitch channel.",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "permissions": [
-    "activeTab", "https://dashboard.twitch.tv/u/*/settings/moderation/blocked-terms"
+    "activeTab"
   ],
-  "browser_action": {
+  "action": {
     "default_title": "Load banned words into Twitch",
     "default_popup": "popup.html"
   },
@@ -14,7 +15,6 @@
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
-  "manifest_version": 2,
   "content_scripts": [
     {
       "matches": [
@@ -23,7 +23,7 @@
       "js": [
         "banListImporter.js"
       ],
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ]
 }
