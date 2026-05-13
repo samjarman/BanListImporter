@@ -1,0 +1,8 @@
+{
+  "name": "ban-list-importer",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "package": "node scripts/package.js"
+  }
+}

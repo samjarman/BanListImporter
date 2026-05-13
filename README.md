@@ -1,28 +1,55 @@
 # Ban List Importer (For Twitch)
 
-*This was written with minimal web dev knowledge, feedback and ideas very welcome!* 
+Ban List Importer is a Chrome extension for adding many Twitch blocked terms or phrases from a pasted list. It is intended for moderators and channel owners who maintain larger safety lists and want to avoid adding terms one at a time in the Twitch dashboard.
 
-This tool (in beta) lets you import a list of ban words. Right now, the process for loading in ban words is slow for large lists. This tool is for those who have a lot of ban words to put in, potentially across many accounts. Comprehensive and sophisticated ban lists are important when creating a safe and inclusive environment in Twitch chat.
+This is an experimental tool that is not sponsored, endorsed, administered by, or associated with Twitch Interactive. Twitch dashboard markup changes can break it.
 
-To use:
-1. Navigate to your banned-words page in the twitch dashboard (https://www.twitch.tv/YOURUSERNAME/dashboard/settings/moderation/blocked-terms)
-2. Click on the purple ban hammer icon in the top right of Chrome. (Don't change tabs)
+## Use
 
-3. Type or paste your terms, separated by a comma. A good list by [@HelloMissPotter](https://twitter.com/HelloMissPotter) is [here](https://docs.google.com/spreadsheets/d/1VBHApWLcjVGOUAC9Q56CwGBpisEKqKrC9LfStIt8pys/edit#gid=0).
+1. Open the Twitch blocked terms page:
+   `https://dashboard.twitch.tv/u/YOURUSERNAME/settings/moderation/blocked-terms`
+2. Click the purple ban hammer extension icon in Chrome.
+3. Paste terms separated by commas or new lines.
+4. Choose whether all imported terms should be **Public** or **Private**.
+5. Click **Ban!**
+6. Keep the Twitch tab open while the import runs.
 
-4. Click ban.
+Existing visible terms are skipped. This does not delete or overwrite existing blocked terms; delete terms from Twitch normally if needed.
 
-5. Do not touch the mouse or keyboard while running, this will interrupt the process.
+## Local Install
 
-If you wish to stop at some point, simply close the tab. 
+1. Open `chrome://extensions`.
+2. Enable **Developer mode**.
+3. Click **Load unpacked**.
+4. Select this repository folder.
+5. Pin the extension if you want the ban hammer visible in the toolbar.
 
-This will not override your existing banned words. Words can be deleted the normal way via the trash can icon.
+## Package
 
-This is an experimental tool that is no way sponsored, endorsed, administered by, or associated with Twitch Interactive and may stop working at any time. We'll try to keep this up to date as time allows.
+Create a Chrome Web Store upload zip:
 
+```sh
+npm run package
+```
 
-## TO DO (PRs welcome!):
- * [ ] Better handling on the focus stuff. 
- * [ ] Options for deleting all
- * [ ] Export current ban list to CSV
- * Ideas welcome! (Open an issue)
+The package is written to `dist/ban-list-importer-v<version>.zip` and includes only the extension files required by Chrome.
+
+## Development
+
+There is no build step. The extension is plain HTML, CSS, JavaScript, and a Manifest V3 `manifest.json`.
+
+Useful checks:
+
+```sh
+node --check banListImporter.js
+node --check popup.js
+jq empty manifest.json
+npm run package
+```
+
+## Ideas
+
+- Better progress reporting while a large list is importing.
+- Options for deleting all blocked terms.
+- Export the current block list to CSV.
+- Better handling for Twitch UI changes.
