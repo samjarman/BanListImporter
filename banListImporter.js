@@ -161,6 +161,16 @@ function getCurrentPrivacy(button) {
     return /\bprivate\b/i.test(getElementLabel(button)) ? 'private' : 'public';
 }
 
+function getLivePrivacyButton(fallbackButton) {
+    return getPrivacyButton() || fallbackButton;
+}
+
+function getLivePrivacy(button) {
+    const liveButton = getLivePrivacyButton(button);
+
+    return liveButton ? getCurrentPrivacy(liveButton) : null;
+}
+
 function clickInteractiveElement(element) {
     const target = element.closest('button, [role="option"], [role="menuitem"], [role="button"], [data-a-target="tw-core-button"]') ||
         element;
@@ -281,7 +291,14 @@ async function waitForPrivacyValue(button, desired) {
     const start = Date.now();
 
     while (Date.now() - start < PRIVACY_WAIT_TIMEOUT) {
-        if (getCurrentPrivacy(button) === desired) {
+        const currentPrivacy = getLivePrivacy(button);
+
+        log('Checking privacy value.', {
+            desired,
+            currentPrivacy
+        });
+
+        if (currentPrivacy === desired) {
             return true;
         }
 
@@ -308,7 +325,7 @@ async function waitForPrivacyButton() {
 
 async function setPrivacy(privacy) {
     const desired = normalizePrivacy(privacy);
-    const button = await waitForPrivacyButton();
+    let button = await waitForPrivacyButton();
 
     if (!button) {
         if (desired === 'public') {
@@ -330,7 +347,7 @@ async function setPrivacy(privacy) {
         currentPrivacy: getCurrentPrivacy(button),
         button: describeElement(button)
     });
-    button.click();
+    clickInteractiveElement(button);
 
     const start = Date.now();
     while (Date.now() - start < PRIVACY_WAIT_TIMEOUT) {
@@ -348,7 +365,7 @@ async function setPrivacy(privacy) {
 
             warn('Clicked privacy option but selector value did not update yet.', {
                 desired,
-                currentPrivacy: getCurrentPrivacy(button)
+                currentPrivacy: getLivePrivacy(button)
             });
         }
 
@@ -357,10 +374,11 @@ async function setPrivacy(privacy) {
 
     warn('Privacy option click path failed; trying keyboard fallback.', {
         desired,
-        currentPrivacy: getCurrentPrivacy(button)
+        currentPrivacy: getLivePrivacy(button)
     });
+    button = getLivePrivacyButton(button);
     button.focus();
-    button.click();
+    clickInteractiveElement(button);
     await sleep(100);
 
     if (desired === 'private') {
@@ -377,7 +395,7 @@ async function setPrivacy(privacy) {
 
     warn('Could not select requested privacy.', {
         desired,
-        currentPrivacy: getCurrentPrivacy(button),
+        currentPrivacy: getLivePrivacy(button),
         button: describeElement(button)
     });
     throw new Error(`Could not select ${desired} privacy in Twitch.`);
